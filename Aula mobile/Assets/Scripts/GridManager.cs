@@ -1,20 +1,63 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
+    //Controle de grid
     public List<Sprite> sprites = new List<Sprite> ();
     public GameObject tilePrefab;
     public int gridDimension = 8;
     public float distance = 1.0f;
     private GameObject[,] grid;
 
+    //GameManager
+    public GameObject gameOverMenu;
+    public TextMeshProUGUI movesText;
+    public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI scoreEndText;
+
+    public int startingMoves = 50;
+    private int numMove;
+    public int NumMove
+    {
+        get
+        {
+            return numMove;
+        }
+        set
+        {
+            numMove = value;
+            movesText.text = "Moves: " + numMove.ToString(); //ou "" + numMove
+        }
+    }
+    private int score;
+    public int Score
+    {
+        get
+        {
+            return score;
+        }
+        set
+        {
+            score = value;
+            scoreText.text = "Score: " + score;
+        }
+    }
+
     public static GridManager instance { get; private set; }
+
+    private void Awake()
+    {
+        instance = this;
+        Score = 0;
+        NumMove = startingMoves;
+        gameOverMenu.SetActive(false);
+    }
 
     void Start()
     {
-        instance = this;
 
         //grid = new GameObject[8,8]; mesma coisa
         grid = new GameObject[gridDimension, gridDimension];
@@ -101,6 +144,7 @@ public class GridManager : MonoBehaviour
             renderer.sprite = null;
         }
 
+        Score += matchedTiles.Count;
         return matchedTiles.Count > 0;
     }
 
@@ -178,13 +222,22 @@ public class GridManager : MonoBehaviour
             temp = renderer1.sprite;
             renderer1.sprite = renderer2.sprite;
             renderer2.sprite = temp;
+            SoundManager.instance.PlaySound(SoundManager.SoundType.TypeMove);
         }
         else
         {
+            SoundManager.instance.PlaySound(SoundManager.SoundType.TypePop);
+            NumMove--;
             do
             {
                 FillHoles();
             } while (CheckMatches());
+
+            if (NumMove <= 0)
+            {
+                NumMove = 0;
+                GameOver();
+            }
         }
     }
 
@@ -208,5 +261,11 @@ public class GridManager : MonoBehaviour
                 }
             }
         }
+    }
+    void GameOver()
+    {
+        scoreEndText.text = "Final Score: " + Score.ToString();
+        gameOverMenu.SetActive(true);
+        SoundManager.instance.PlaySound(SoundManager.SoundType.TypeGameOver);
     }
 }

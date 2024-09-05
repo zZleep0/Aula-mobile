@@ -42,6 +42,7 @@ public class Tile : MonoBehaviour
 
             else
             {
+                SoundManager.instance.PlaySound(SoundManager.SoundType.TypeSelect);
                 selected = this;
                 Select();
             }
@@ -49,6 +50,7 @@ public class Tile : MonoBehaviour
 
         else
         {
+            SoundManager.instance.PlaySound(SoundManager.SoundType.TypeSelect);
             selected = this;
             Select();
         }
