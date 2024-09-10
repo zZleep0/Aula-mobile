@@ -144,6 +144,7 @@ public class GridManager : MonoBehaviour
             renderer.sprite = null;
         }
 
+        
         Score += matchedTiles.Count;
         return matchedTiles.Count > 0;
     }
@@ -268,4 +269,6 @@ public class GridManager : MonoBehaviour
         gameOverMenu.SetActive(true);
         SoundManager.instance.PlaySound(SoundManager.SoundType.TypeGameOver);
     }
+
+    
 }

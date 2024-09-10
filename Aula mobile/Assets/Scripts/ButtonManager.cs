@@ -7,6 +7,7 @@ public class ButtonManager : MonoBehaviour
 {
     public GameObject pauseMenu;
     public GridManager gridManager;
+    public GameObject botaoPowerUp;
 
     private void Start()
     {
@@ -14,11 +15,16 @@ public class ButtonManager : MonoBehaviour
         {
             pauseMenu = GameObject.Find("Pause Menu");
         }
+        botaoPowerUp.SetActive(false);
         pauseMenu.SetActive(false);
     }
     public void Update()
     {
         Pause();
+        if (gridManager.Score >= 10)
+        {
+            botaoPowerUp.SetActive(true);
+        }
     }
 
     public void Iniciar()
@@ -51,6 +57,7 @@ public class ButtonManager : MonoBehaviour
 
     public void BuffScore()
     {
-        
+        gridManager.Score *= 2;
+        botaoPowerUp.SetActive(false);
     }
 }
