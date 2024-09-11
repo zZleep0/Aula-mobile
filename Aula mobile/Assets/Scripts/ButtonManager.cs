@@ -7,7 +7,8 @@ public class ButtonManager : MonoBehaviour
 {
     public GameObject pauseMenu;
     public GridManager gridManager;
-    public GameObject botaoPowerUp;
+    public GameObject buffScoreBtn;
+    public GameObject plusMovesBtn;
 
     private void Start()
     {
@@ -15,22 +16,22 @@ public class ButtonManager : MonoBehaviour
         {
             pauseMenu = GameObject.Find("Pause Menu");
         }
-        botaoPowerUp.SetActive(false);
         pauseMenu.SetActive(false);
+
+        buffScoreBtn.SetActive(false);
+        plusMovesBtn.SetActive(false);
     }
     public void Update()
     {
         Pause();
-        if (gridManager.Score >= 10)
+        if (gridManager.Score >= 10 && gridManager.Score <= 19)
         {
-            botaoPowerUp.SetActive(true);
+            buffScoreBtn.SetActive(true);
+            //plusMovesBtn.SetActive(true); // Nao deu certo oque eu queria :(
+            
         }
     }
 
-    public void Iniciar()
-    {
-        SceneManager.LoadScene("Fase 1");
-    }
 
     public void Restart()
     {
@@ -58,6 +59,10 @@ public class ButtonManager : MonoBehaviour
     public void BuffScore()
     {
         gridManager.Score *= 2;
-        botaoPowerUp.SetActive(false);
+    }
+
+    public void PlusMoves()
+    {
+        gridManager.NumMove += 3;
     }
 }
